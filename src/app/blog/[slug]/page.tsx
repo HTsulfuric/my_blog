@@ -1,6 +1,8 @@
 import { getPostBySlug, getPostSlugs } from "@/lib/mdx";
+import { calculateReadingTime, formatRelativeDate } from "@/lib/utils";
 import PostRenderer from "@/components/PostRenderer";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 // ----------------------------------------------------
 // 1. 型定義: Next.js 15 (または最新版) では params は Promise です
@@ -59,23 +61,39 @@ export default async function PostPage({ params }: PostPageProps) {
     notFound();
   }
 
+  const readingTime = calculateReadingTime(post.content);
+  const relativeDate = formatRelativeDate(post.frontMatter.date as string);
+  const tags = (post.frontMatter.tags as string[]) || [];
+
   return (
     <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-      <header className="mb-8 border-b pb-4">
-        <h1 className="text-4xl font-extrabold mb-3 text-gray-900 dark:text-white">
+      <header className="mb-8 border-b border-[#D8DEE9] dark:border-[#4C566A] pb-6">
+        <h1 className="text-4xl font-extrabold mb-4 text-[#2E3440] dark:text-[#ECEFF4]">
           {post.frontMatter.title as string}
         </h1>
-        <p className="text-sm text-gray-500">
-          公開日: {post.frontMatter.date as string}
-        </p>
+
+        <div className="flex items-center gap-3 text-sm text-[#4C566A] dark:text-[#D8DEE9] mb-4">
+          <time>{relativeDate}</time>
+          <span>•</span>
+          <span>{readingTime}分で読めます</span>
+        </div>
+
+        {tags.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <Link
+                key={tag}
+                href={`/tag/${encodeURIComponent(tag)}`}
+                className="px-3 py-1 text-sm rounded bg-[#88C0D0]/10 text-[#5E81AC] dark:bg-[#88C0D0]/20 dark:text-[#88C0D0] hover:bg-[#88C0D0]/20 dark:hover:bg-[#88C0D0]/30 transition-colors"
+              >
+                {tag}
+              </Link>
+            ))}
+          </div>
+        )}
       </header>
 
       <article className="prose lg:prose-xl dark:prose-invert">
-        {/* 💡 ポイント: 
-          シリアライズされた mdxSource ではなく、
-          生のテキストデータ (content) を渡します。
-          変換は Server Component である PostRenderer 内部で行われます。
-        */}
         <PostRenderer source={post.content} />
       </article>
     </div>

@@ -32,11 +32,12 @@ export const getAllPostsMeta = () => {
     const realSlug = slug.replace(/\.mdx?$/, "");
     const fullPath = path.join(POSTS_PATH, slug);
     const fileContents = fs.readFileSync(fullPath, "utf8");
-    const { data: frontMatter } = matter(fileContents);
+    const { data: frontMatter, content } = matter(fileContents);
 
     return {
       slug: realSlug,
       frontMatter,
+      content,
     };
   });
 
