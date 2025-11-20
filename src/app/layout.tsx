@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "熱濃硫酸の部屋",
-    template: "%s | 熱濃硫酸の部屋",
+    default: "熱濃硫酸の本棚",
+    template: "%s | 熱濃硫酸の本棚",
   },
   description: "プログラミングと技術についてのブログ",
 };

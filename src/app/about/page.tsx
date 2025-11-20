@@ -2,7 +2,7 @@ import lighthouseData from "../../../public/lighthouse.json";
 
 export const metadata = {
   title: "About",
-  description: "熱濃硫酸の部屋について",
+  description: "熱濃硫酸の本棚について",
 };
 
 export default function AboutPage() {
@@ -29,7 +29,7 @@ export default function AboutPage() {
       {/* Timeline Section */}
       <div className="mb-16">
         <h2 className="text-3xl font-semibold text-[#2E3440] dark:text-[#ECEFF4] mb-8">
-          Technical Journey
+          Timeline
         </h2>
 
         <div className="space-y-8">
@@ -40,14 +40,10 @@ export default function AboutPage() {
               <div className="w-0.5 h-full bg-[#88C0D0] mt-2"></div>
             </div>
             <div className="flex-grow pb-4">
-              <div className="text-sm font-bold text-[#88C0D0] mb-2">YYYY</div>
-              <h3 className="text-xl font-semibold text-[#2E3440] dark:text-[#ECEFF4] mb-2">
-                Milestone Title
+              <div className="text-sm font-bold text-[#88C0D0] mb-2">2022</div>
+              <h3 className="text-lg font-semibold text-[#2E3440] dark:text-[#ECEFF4] mb-2">
+                私立東海高等学校 卒業
               </h3>
-              <p className="text-[#434C5E] dark:text-[#E5E9F0]">
-                What you learned or what changed in your thinking. Focus on the
-                lesson, not just the technology.
-              </p>
             </div>
           </div>
 
@@ -58,13 +54,10 @@ export default function AboutPage() {
               <div className="w-0.5 h-full bg-[#88C0D0] mt-2"></div>
             </div>
             <div className="flex-grow pb-4">
-              <div className="text-sm font-bold text-[#88C0D0] mb-2">YYYY</div>
-              <h3 className="text-xl font-semibold text-[#2E3440] dark:text-[#ECEFF4] mb-2">
-                Another Milestone
+              <div className="text-sm font-bold text-[#88C0D0] mb-2">2022</div>
+              <h3 className="text-lg font-semibold text-[#2E3440] dark:text-[#ECEFF4] mb-2">
+                東京大学 理科一類 入学
               </h3>
-              <p className="text-[#434C5E] dark:text-[#E5E9F0]">
-                A key learning moment or pivot in your journey.
-              </p>
             </div>
           </div>
 
@@ -74,25 +67,16 @@ export default function AboutPage() {
               <div className="w-4 h-4 rounded-full bg-[#88C0D0]"></div>
             </div>
             <div className="flex-grow">
-              <div className="text-sm font-bold text-[#88C0D0] mb-2">YYYY</div>
-              <h3 className="text-xl font-semibold text-[#2E3440] dark:text-[#ECEFF4] mb-2">
-                Recent Development
+              <div className="text-sm font-bold text-[#88C0D0] mb-2">2024</div>
+              <h3 className="text-lg font-semibold text-[#2E3440] dark:text-[#ECEFF4] mb-2">
+                東京大学 工学部 電気電子工学科 進学
               </h3>
               <p className="text-[#434C5E] dark:text-[#E5E9F0]">
-                Where you are now and what you focus on.
+                現在所属(mtl lab)
               </p>
             </div>
           </div>
         </div>
-
-        {/* TODO for user */}
-        {/*
-          TODO: Customize timeline above
-          - Replace YYYY with actual years
-          - Update titles and descriptions with your journey
-          - Add or remove items (duplicate the structure)
-          - Focus on what you learned, not just tech lists
-        */}
       </div>
 
       {/* Uses Section */}
@@ -108,9 +92,8 @@ export default function AboutPage() {
               Editor
             </h3>
             <ul className="space-y-2 text-[#434C5E] dark:text-[#E5E9F0] text-sm">
-              <li>VSCode - Primary editor</li>
-              <li>Theme: Nord</li>
-              <li>Font: JetBrains Mono</li>
+              <li>NeoVim </li>
+              <li>VScode</li>
             </ul>
           </div>
 
@@ -120,9 +103,8 @@ export default function AboutPage() {
               Terminal
             </h3>
             <ul className="space-y-2 text-[#434C5E] dark:text-[#E5E9F0] text-sm">
-              <li>iTerm2 - Terminal</li>
-              <li>zsh - Shell</li>
-              <li>tmux - Sessions</li>
+              <li>Wezterm</li>
+              <li>fish</li>
             </ul>
           </div>
 
@@ -132,9 +114,8 @@ export default function AboutPage() {
               Hardware
             </h3>
             <ul className="space-y-2 text-[#434C5E] dark:text-[#E5E9F0] text-sm">
-              <li>MacBook Pro M2</li>
-              <li>LG UltraFine 4K</li>
-              <li>HHKB Keyboard</li>
+              <li>MacBook Air M1</li>
+              <li>HHKB professional classic type-s</li>
             </ul>
           </div>
 
@@ -144,32 +125,11 @@ export default function AboutPage() {
               Daily Drivers
             </h3>
             <ul className="space-y-2 text-[#434C5E] dark:text-[#E5E9F0] text-sm">
-              <li>Arc Browser</li>
-              <li>Raycast Launcher</li>
-              <li>Obsidian Notes</li>
+              <li>firefox</li>
+              <li>Obsidian</li>
             </ul>
           </div>
         </div>
-
-        {/* What I Stopped Using */}
-        <div className="mt-8 p-4 bg-[#BF616A] bg-opacity-10 dark:bg-[#BF616A] dark:bg-opacity-20 rounded-lg border border-[#BF616A]">
-          <h3 className="text-lg font-semibold text-[#BF616A] mb-3">
-            What I Stopped Using
-          </h3>
-          <ul className="space-y-2 text-[#434C5E] dark:text-[#E5E9F0] text-sm">
-            <li>Docker Desktop - Too heavy, switched to Colima</li>
-            <li>Postman - Bloated, using Bruno now</li>
-            <li>Notion - Too slow, back to markdown</li>
-          </ul>
-        </div>
-
-        {/* TODO for user */}
-        {/*
-          TODO: Update /uses section with your actual tools
-          - Replace all placeholder tools with what you use
-          - Add or remove categories as needed
-          - Keep "What I Stopped Using" honest
-        */}
       </div>
 
       {/* Tech Stack */}
@@ -177,9 +137,6 @@ export default function AboutPage() {
         <h2 className="text-2xl font-semibold text-[#2E3440] dark:text-[#ECEFF4] mb-4">
           Tech Stack
         </h2>
-        <p className="text-[#434C5E] dark:text-[#E5E9F0] mb-2">
-          このブログの構成要素:
-        </p>
         <ul className="list-disc pl-6 space-y-1 text-[#434C5E] dark:text-[#E5E9F0]">
           <li>Next.js 16 (App Router)</li>
           <li>React 19</li>

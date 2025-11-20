@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="max-w-4xl mx-auto px-6 py-8">
         <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
           <p className="text-sm text-[#4C566A] dark:text-[#D8DEE9]">
-            © {currentYear} 熱濃硫酸の部屋. All rights reserved.
+            © {currentYear} 熱濃硫酸の本棚. All rights reserved.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">

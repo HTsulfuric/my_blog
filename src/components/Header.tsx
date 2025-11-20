@@ -8,7 +8,7 @@ export default function Header() {
           href="/"
           className="text-xl font-bold text-[#2E3440] dark:text-[#ECEFF4] hover:text-[#5E81AC] dark:hover:text-[#88C0D0] transition-colors"
         >
-          熱濃硫酸の部屋
+          熱濃硫酸の本棚
         </Link>
 
         <div className="flex items-center gap-6">
