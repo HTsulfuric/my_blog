@@ -1,17 +1,15 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import type { Post, PostMeta, PostFrontMatter } from "@/types/post";
 
-// 記事ディレクトリ
 const POSTS_PATH = path.join(process.cwd(), "src/content/posts");
 
-// スラッグ一覧を取得
-export const getPostSlugs = () => {
+export const getPostSlugs = (): string[] => {
   return fs.readdirSync(POSTS_PATH);
 };
 
-// 特定の記事を取得
-export const getPostBySlug = async (slug: string) => {
+export const getPostBySlug = async (slug: string): Promise<Post> => {
   const sanitized = slug.replace(/[^a-zA-Z0-9-_]/g, "");
 
   if (slug !== sanitized || slug.includes("..")) {
@@ -27,28 +25,26 @@ export const getPostBySlug = async (slug: string) => {
   }
 
   const fileContents = fs.readFileSync(fullPath, "utf8");
-
-  const { data: frontMatter, content } = matter(fileContents);
+  const { data, content } = matter(fileContents);
 
   return {
     slug: realSlug,
-    frontMatter,
+    frontMatter: data as PostFrontMatter,
     content,
   };
 };
 
-// 全記事のメタデータを取得
-export const getAllPostsMeta = () => {
+export const getAllPostsMeta = (): PostMeta[] => {
   const slugs = getPostSlugs();
   const posts = slugs.map((slug) => {
     const realSlug = slug.replace(/\.mdx?$/, "");
     const fullPath = path.join(POSTS_PATH, slug);
     const fileContents = fs.readFileSync(fullPath, "utf8");
-    const { data: frontMatter, content } = matter(fileContents);
+    const { data, content } = matter(fileContents);
 
     return {
       slug: realSlug,
-      frontMatter,
+      frontMatter: data as PostFrontMatter,
       content,
     };
   });

@@ -1,19 +1,21 @@
-import { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
 import { getAllPostsMeta } from "@/lib/mdx";
+
+const SITE_URL = "https://htsulfuric.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const posts = getAllPostsMeta();
 
   const postEntries: MetadataRoute.Sitemap = posts.map((post) => ({
-    url: `https://htsulfuric.com/blog/${post.slug}`,
-    lastModified: new Date(post.frontMatter.date as string),
+    url: `${SITE_URL}/blog/${post.slug}`,
+    lastModified: new Date(post.frontMatter.date),
     changeFrequency: "monthly" as const,
     priority: 0.7,
   }));
 
   return [
     {
-      url: "https://htsulfuric.com",
+      url: SITE_URL,
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
       priority: 1.0,

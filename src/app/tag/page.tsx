@@ -6,20 +6,29 @@ export const metadata = {
   description: "全てのタグを表示",
 };
 
-export default function TagIndexPage() {
+const getTagCounts = (): Map<string, number> => {
   const posts = getAllPostsMeta();
-  const tagCountMap = new Map<string, number>();
+  const tagCounts = new Map<string, number>();
 
   posts.forEach((post) => {
-    const tags = (post.frontMatter.tags as string[]) || [];
+    const tags = post.frontMatter.tags || [];
     tags.forEach((tag) => {
-      tagCountMap.set(tag, (tagCountMap.get(tag) || 0) + 1);
+      tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
     });
   });
 
-  const sortedTags = Array.from(tagCountMap.entries()).sort(
-    (a, b) => b[1] - a[1],
-  );
+  return tagCounts;
+};
+
+const sortTagsByCount = (
+  tagCounts: Map<string, number>
+): [string, number][] => {
+  return Array.from(tagCounts.entries()).sort((a, b) => b[1] - a[1]);
+};
+
+export default function TagIndexPage() {
+  const tagCounts = getTagCounts();
+  const sortedTags = sortTagsByCount(tagCounts);
 
   return (
     <div className="min-h-screen">
