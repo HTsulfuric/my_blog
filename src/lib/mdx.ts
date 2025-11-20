@@ -12,8 +12,20 @@ export const getPostSlugs = () => {
 
 // 特定の記事を取得
 export const getPostBySlug = async (slug: string) => {
-  const realSlug = slug.replace(/\.mdx?$/, "");
+  const sanitized = slug.replace(/[^a-zA-Z0-9-_]/g, "");
+
+  if (slug !== sanitized || slug.includes("..")) {
+    throw new Error("Invalid slug format");
+  }
+
+  const realSlug = sanitized.replace(/\.mdx?$/, "");
   const fullPath = path.join(POSTS_PATH, `${realSlug}.mdx`);
+
+  const normalizedPath = path.normalize(fullPath);
+  if (!normalizedPath.startsWith(POSTS_PATH)) {
+    throw new Error("Path traversal attempt detected");
+  }
+
   const fileContents = fs.readFileSync(fullPath, "utf8");
 
   const { data: frontMatter, content } = matter(fileContents);

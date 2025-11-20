@@ -12,7 +12,7 @@ async function runLighthouse() {
     port: chrome.port,
   };
 
-  const url = process.env.SITE_URL || "http://htsulfuric.com";
+  const url = process.env.SITE_URL || "https://htsulfuric.com";
 
   console.log(`Running Lighthouse on ${url}...`);
   const runnerResult = await lighthouse(url, options);

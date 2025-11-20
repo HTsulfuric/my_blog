@@ -1,0 +1,10 @@
+# CODEOWNERS - Require review for content changes
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# All MDX content requires review by the owner
+src/content/posts/* @HTsulfuric
+
+# Security-sensitive files
+.github/workflows/* @HTsulfuric
+next.config.ts @HTsulfuric
+src/lib/mdx.ts @HTsulfuric

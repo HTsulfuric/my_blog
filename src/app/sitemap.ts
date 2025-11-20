@@ -13,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     {
-      url: "https://your-domain.com",
+      url: "https://htsulfuric.com",
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
       priority: 1.0,
