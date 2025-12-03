@@ -1,15 +1,16 @@
+import { Metadata } from "next";
 import { getAllPostsMeta } from "@/lib/mdx";
 import { calculateReadingTime, formatRelativeDate } from "@/lib/utils";
 import TagList from "@/components/TagList";
 import Link from "next/link";
 
 const sortPostsByDate = <T extends { frontMatter: { date: string } }>(
-  posts: T[]
+  posts: T[],
 ): T[] => {
   return [...posts].sort(
     (a, b) =>
       new Date(b.frontMatter.date).getTime() -
-      new Date(a.frontMatter.date).getTime()
+      new Date(a.frontMatter.date).getTime(),
   );
 };
 
@@ -67,6 +68,11 @@ export default function HomePage() {
   );
 }
 
-export const metadata = {
-  title: "ホーム",
+export const metadata: Metadata = {
+  description:
+    "熱濃硫酸の本棚へようこそ。プログラミング、Web技術、Next.js、Reactなどについての技術記事や雑記を公開している個人の技術ブログです。",
+  openGraph: {
+    description:
+      "熱濃硫酸の本棚へようこそ。プログラミング、Web技術、Next.js、Reactなどについての技術記事や雑記を公開している個人の技術ブログです。",
+  },
 };
