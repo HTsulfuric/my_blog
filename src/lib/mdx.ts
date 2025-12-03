@@ -27,6 +27,11 @@ export const getPostBySlug = async (slug: string): Promise<Post> => {
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const { data, content } = matter(fileContents);
 
+  // In production, prevent access to unpublished posts
+  if (process.env.NODE_ENV === "production" && data.published === false) {
+    throw new Error("Post is not published");
+  }
+
   return {
     slug: realSlug,
     frontMatter: data as PostFrontMatter,
@@ -36,18 +41,27 @@ export const getPostBySlug = async (slug: string): Promise<Post> => {
 
 export const getAllPostsMeta = (): PostMeta[] => {
   const slugs = getPostSlugs();
-  const posts = slugs.map((slug) => {
-    const realSlug = slug.replace(/\.mdx?$/, "");
-    const fullPath = path.join(POSTS_PATH, slug);
-    const fileContents = fs.readFileSync(fullPath, "utf8");
-    const { data, content } = matter(fileContents);
+  const posts = slugs
+    .map((slug) => {
+      const realSlug = slug.replace(/\.mdx?$/, "");
+      const fullPath = path.join(POSTS_PATH, slug);
+      const fileContents = fs.readFileSync(fullPath, "utf8");
+      const { data, content } = matter(fileContents);
 
-    return {
-      slug: realSlug,
-      frontMatter: data as PostFrontMatter,
-      content,
-    };
-  });
+      return {
+        slug: realSlug,
+        frontMatter: data as PostFrontMatter,
+        content,
+      };
+    })
+    .filter((post) => {
+      // In production, filter out posts where published is strictly false
+      if (process.env.NODE_ENV === "production") {
+        return post.frontMatter.published !== false;
+      }
+      // In development, show all posts
+      return true;
+    });
 
   return posts;
 };

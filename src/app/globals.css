@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 :root {
   /* Nord Snow Storm (Light theme) */
@@ -87,4 +88,33 @@ div[data-rehype-pretty-code-fragment] code {
 
 span[data-highlighted-line] {
   @apply bg-gray-800 border-l-4 border-blue-500 pl-3 block -mx-4 pr-4;
+}
+
+/* Adjust heading spacing */
+.prose h1 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+/* Markdown heading indicators */
+.prose h1::before {
+  content: "# ";
+  color: var(--nord10);
+  /* Nord Frost Blue */
+  margin-right: 0.25em;
+  font-weight: inherit;
+}
+
+.prose h2::before {
+  content: "## ";
+  color: var(--nord10);
+  margin-right: 0.25em;
+  font-weight: inherit;
+}
+
+.prose h3::before {
+  content: "### ";
+  color: var(--nord10);
+  margin-right: 0.25em;
+  font-weight: inherit;
 }

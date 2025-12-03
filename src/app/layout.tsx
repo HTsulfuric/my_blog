@@ -17,11 +17,26 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://htsulfuric.com"),
   title: {
     default: "熱濃硫酸の本棚",
     template: "%s | 熱濃硫酸の本棚",
   },
   description: "プログラミングと技術についてのブログ",
+  openGraph: {
+    title: "熱濃硫酸の本棚",
+    description: "プログラミングと技術についてのブログ",
+    url: "https://htsulfuric.com",
+    siteName: "熱濃硫酸の本棚",
+    locale: "ja_JP",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "熱濃硫酸の本棚",
+    description: "プログラミングと技術についてのブログ",
+    creator: "@HTsulfuric", // Assuming this is the handle based on the repo/domain name, user can change it
+  },
 };
 
 export default function RootLayout({

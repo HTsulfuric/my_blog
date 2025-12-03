@@ -1,4 +1,3 @@
-import lighthouseData from "../../../public/lighthouse.json";
 
 export const metadata = {
   title: "About",
@@ -145,23 +144,7 @@ export default function AboutPage() {
           <li>Tailwind CSS v4</li>
         </ul>
 
-        {/* Lighthouse Score */}
-        {lighthouseData.score > 0 && (
-          <div className="mt-6 p-4 bg-[#88C0D0] bg-opacity-10 dark:bg-[#88C0D0] dark:bg-opacity-20 rounded-lg border border-[#88C0D0]">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-[#434C5E] dark:text-[#E5E9F0]">
-                Lighthouse Performance
-              </span>
-              <span className="text-2xl font-bold text-[#88C0D0]">
-                {lighthouseData.score}/100
-              </span>
-            </div>
-            <p className="text-xs text-[#434C5E] dark:text-[#E5E9F0] mt-2">
-              Last tested:{" "}
-              {new Date(lighthouseData.lastUpdated).toLocaleDateString("ja-JP")}
-            </p>
-          </div>
-        )}
+
       </div>
     </div>
   );

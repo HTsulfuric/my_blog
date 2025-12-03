@@ -3,6 +3,7 @@ export interface PostFrontMatter {
   date: string;
   description: string;
   tags?: string[];
+  published?: boolean;
 }
 
 export interface Post {

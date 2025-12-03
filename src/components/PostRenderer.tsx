@@ -1,6 +1,7 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypePrettyCode from "rehype-pretty-code";
 import remarkGfm from "remark-gfm";
+import LinkCard from "@/components/LinkCard";
 
 interface PostRendererProps {
   source: string;
@@ -21,11 +22,18 @@ const mdxOptions = {
   },
 };
 
+const components = {
+  LinkCard,
+};
+
 export default function PostRenderer({ source }: PostRendererProps) {
   return (
     <div className="mdx-content">
-      {/* @ts-expect-error - MDXRemote RSC types are not fully compatible with TypeScript */}
-      <MDXRemote source={source} options={mdxOptions} />
+      <MDXRemote
+        source={source}
+        options={mdxOptions as any}
+        components={components}
+      />
     </div>
   );
 }

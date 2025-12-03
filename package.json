@@ -6,13 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "lighthouse": "node scripts/lighthouse.mjs"
+    "lint": "eslint"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
+    "cheerio": "^1.1.2",
     "gray-matter": "^4.0.3",
     "next": "16.0.3",
     "next-mdx-remote": "^5.0.0",
@@ -28,10 +28,8 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
-    "chrome-launcher": "^1.2.1",
     "eslint": "^9",
     "eslint-config-next": "16.0.3",
-    "lighthouse": "^13.0.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

@@ -1,4 +1,4 @@
-import { getPostBySlug, getPostSlugs } from "@/lib/mdx";
+import { getAllPostsMeta, getPostBySlug } from "@/lib/mdx";
 import { calculateReadingTime, formatRelativeDate } from "@/lib/utils";
 import PostRenderer from "@/components/PostRenderer";
 import TagList from "@/components/TagList";
@@ -9,9 +9,9 @@ interface PostPageProps {
 }
 
 export async function generateStaticParams() {
-  const slugs = getPostSlugs();
-  return slugs.map((slug) => ({
-    slug: slug.replace(/\.mdx?$/, ""),
+  const posts = getAllPostsMeta();
+  return posts.map((post) => ({
+    slug: post.slug,
   }));
 }
 
@@ -23,6 +23,17 @@ export async function generateMetadata({ params }: PostPageProps) {
     return {
       title: post.frontMatter.title,
       description: post.frontMatter.description,
+      openGraph: {
+        title: post.frontMatter.title,
+        description: post.frontMatter.description,
+        type: "article",
+        publishedTime: post.frontMatter.date,
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: post.frontMatter.title,
+        description: post.frontMatter.description,
+      },
     };
   } catch {
     return {
@@ -61,7 +72,7 @@ export default async function PostPage({ params }: PostPageProps) {
         <TagList tags={tags} size="medium" />
       </header>
 
-      <article className="prose lg:prose-xl dark:prose-invert">
+      <article className="prose dark:prose-invert max-w-none">
         <PostRenderer source={post.content} />
       </article>
     </div>
