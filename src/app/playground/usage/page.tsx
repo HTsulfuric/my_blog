@@ -1,4 +1,4 @@
-import UsageChart from "@/components/UsageChart";
+import UsageChart from "./UsageChart";
 import usageData from "@/data/usage.json";
 
 export const metadata = {
