@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Running pre-commit hooks..."
+
+# Claude Usage Data を更新
+npm run update-usage
+
+# src/data/usage.json が変更された場合、その変更をステージングする
+# (変更がなければ `git status --porcelain` は何も出力しない)
+if [[ -n $(git status --porcelain src/data/usage.json) ]]; then
+  git add src/data/usage.json
+  echo "src/data/usage.json updated and staged."
+else
+  echo "src/data/usage.json has no new changes."
+fi
+
+# Lint を実行
+npm run lint
+
+# Lint でエラーが発生した場合はコミットを中止
+if [ $? -ne 0 ]; then
+  echo "Linting failed. Please fix the errors before committing."
+  exit 1
+fi

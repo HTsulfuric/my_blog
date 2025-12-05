@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "update-usage": "mkdir -p src/data && npx ccusage daily --json > src/data/usage.json",
+    "prepare": "husky"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",
@@ -18,6 +20,7 @@
     "next-mdx-remote": "^5.0.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "recharts": "^3.5.1",
     "rehype-pretty-code": "^0.14.1",
     "remark-gfm": "^4.0.1",
     "shiki": "^3.15.0"
@@ -30,6 +33,7 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.0.3",
+    "husky": "^9.1.7",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

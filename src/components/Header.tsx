@@ -24,6 +24,12 @@ export default function Header() {
           >
             タグ
           </Link>
+          <Link
+            href="/playground"
+            className="text-sm font-medium text-[#4C566A] dark:text-[#D8DEE9] hover:text-[#5E81AC] dark:hover:text-[#88C0D0] transition-colors"
+          >
+            遊び場
+          </Link>
         </div>
       </nav>
     </header>

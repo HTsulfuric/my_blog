@@ -31,6 +31,7 @@ export default function PostRenderer({ source }: PostRendererProps) {
     <div className="mdx-content">
       <MDXRemote
         source={source}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         options={mdxOptions as any}
         components={components}
       />
