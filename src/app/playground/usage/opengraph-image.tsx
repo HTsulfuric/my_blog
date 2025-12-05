@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Claude API Usage";
+export const alt = "Claude API usage";
 export const size = {
   width: 1200,
   height: 630,
@@ -43,7 +43,7 @@ export default async function Image() {
             flexWrap: "wrap",
           }}
         >
-          Claude API Usage
+          Claude API 使用量
         </div>
         <div
           style={{
@@ -59,6 +59,6 @@ export default async function Image() {
     ),
     {
       ...size,
-    }
+    },
   );
 }

@@ -1,0 +1,193 @@
+---
+title: "API使用量の監視ページ作成とHuskyによる自動コミット設定"
+date: "2025-12-05"
+description: "Next.jsプロジェクトにClaude APIの使用状況を監視するページを構築し、Git Huskyを使ってデータの自動更新・コミットを行う仕組みを導入しました。"
+tags: ["Next.js", "Claude API", "Monitoring", "Automation", "Husky", "Git Hooks"]
+published: false
+---
+
+## 概要
+
+本記事では、Next.jsプロジェクトにClaude APIの使用状況を可視化する監視ページを構築し、さらにそのデータを開発ワークフローの中で自動的に更新・コミットする仕組みを導入した経緯と具体的な実装について解説します。
+
+## 背景
+
+AIモデルのAPI利用が増える中で、日々の利用状況やコストを把握することは非常に重要です。当初、Claude APIの使用量データは手動で更新していましたが、これをより効率的に、かつ開発サイクルに組み込むことで常に最新の情報を得られるようにしたいと考えました。
+
+## 実装内容
+
+### 1. API使用量監視ページの構築
+
+既存のAPI使用量ページを `/usage` から `/playground/usage` へ移動し、`/playground` を「遊び場」と称した各種ツールのハブとして再構成しました。
+
+#### Playgroundの導入 (src/app/playground/page.tsx)
+
+新しい `/playground` ルートには、今後追加されるであろう様々なツールへのリンクを集約します。
+
+```tsx filename="src/app/playground/page.tsx"
+import Link from "next/link";
+
+export const metadata = {
+  title: "遊び場",
+  description: "いろいろなツールを置いておく場所です。",
+};
+
+export default function PlaygroundPage() {
+  const tools = [
+    {
+      title: "API使用量",
+      description: "Claude APIの日次使用量とコストを確認できます。",
+      href: "/playground/usage",
+    },
+  ];
+
+  return (
+    <main className="container mx-auto px-4 py-8 max-w-4xl">
+      {/* ... 省略 ... */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {tools.map((tool) => (
+          <Link
+            key={tool.href}
+            href={tool.href}
+            // ... 省略 ...
+          >
+            <h2 className="text-xl font-bold mb-2 text-[#2E3440] dark:text-[#ECEFF4]">
+              {tool.title}
+            </h2>
+            <p className="text-[#4C566A] dark:text-[#D8DEE9]">
+              {tool.description}
+            </p>
+          </Link>
+        ))}
+      </div>
+    </main>
+  );
+}
+```
+
+#### API使用量ページの移動と更新日時の修正 (src/app/playground/usage/page.tsx)
+
+元の `/usage` ページを `/playground/usage` に移動し、チャートの表示ロジックはそのままにしました。また、表示される「最終更新日時」が常にページを開いた時刻になってしまう問題を修正し、`usage.json` 内の最新の日付を表示するようにしました。
+
+```tsx filename="src/app/playground/usage/page.tsx"
+import UsageChart from "@/components/UsageChart";
+import usageData from "@/data/usage.json"; // 取得した使用量データ
+
+export const metadata = {
+  title: "Claude Usage Stats",
+  description: "Daily usage statistics for Claude API",
+};
+
+export default function UsagePage() {
+  // usageData.dailyの最後の要素から日付を取得
+  const lastUpdated = usageData.daily.length > 0
+    ? usageData.daily[usageData.daily.length - 1].date
+    : new Date().toLocaleDateString(); // データがない場合のフォールバック
+
+  return (
+    <main className="container mx-auto px-4 py-8 max-w-4xl">
+      {/* ... 省略 ... */}
+      <UsageChart data={usageData.daily} />
+      <div className="mt-8 text-sm text-gray-500 dark:text-gray-500 text-center">
+        Last updated: {lastUpdated}
+      </div>
+    </main>
+  );
+}
+```
+
+#### OGP画像の追加
+
+`src/app/blog/[slug]/opengraph-image.tsx` と同様に、`src/app/playground/usage/opengraph-image.tsx` を追加し、ソーシャルメディアなどで共有された際の見栄えを良くしました。
+
+### 2. Huskyによる使用量データの自動更新
+
+`ccusage` ツールでAPI使用量データを取得し、`src/data/usage.json` に保存するスクリプトが用意されていましたが、これを手動で実行するのは手間でした。そこで、Gitの `pre-commit` フックを活用し、コミット時に自動でデータを更新する仕組みを導入しました。
+
+#### `package.json` スクリプト
+
+`npm run update-usage` コマンドでデータが更新されるように定義しています。
+
+```json filename="package.json"
+{
+  "name": "my-nextjs-blog",
+  // ... 省略 ...
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "update-usage": "mkdir -p src/data && npx ccusage daily --json > src/data/usage.json"
+  },
+  // ... 省略 ...
+  "devDependencies": {
+    // ... 省略 ...
+    "husky": "^9.0.11", // Huskyをインストール
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
+```
+
+#### Husky の設定 (.husky/pre-commit)
+
+`husky` をインストールし、`.husky/pre-commit` ファイルを以下の内容で設定しました。コミット時に `update-usage` を実行し、変更があれば自動でステージングします。また、コード品質を保つために `lint` も実行し、エラーがあればコミットをブロックします。
+
+```bash filename=".husky/pre-commit"
+echo "Running pre-commit hooks..."
+
+# Claude Usage Data を更新
+npm run update-usage
+
+# src/data/usage.json が変更された場合、その変更をステージングする
+if [[ -n $(git status --porcelain src/data/usage.json) ]]; then
+  git add src/data/usage.json
+  echo "src/data/usage.json updated and staged."
+else
+  echo "src/data/usage.json has no new changes."
+fi
+
+# Lint を実行
+npm run lint
+
+# Lint でエラーが発生した場合はコミットを中止
+if [ $? -ne 0 ]; then
+  echo "Linting failed. Please fix the errors before committing."
+  exit 1
+fi
+```
+
+### 3. ヘッダーナビゲーションの更新
+
+サイト全体のナビゲーションも、API使用量ページへの直接リンクから `/playground` へのリンクに切り替えました。
+
+```tsx filename="src/components/Header.tsx"
+import Link from "next/link";
+
+export default function Header() {
+  return (
+    <header className="border-b border-[#D8DEE9] dark:border-[#4C566A] bg-white dark:bg-[#2E3440]">
+      <nav className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+        {/* ... 省略 ... */}
+        <div className="flex items-center gap-6">
+          <Link href="/">ホーム</Link>
+          <Link href="/tag">タグ</Link>
+          {/* API使用量から遊び場へ変更 */}
+          <Link
+            href="/playground"
+            className="text-sm font-medium text-[#4C566A] dark:text-[#D8DEE9] hover:text-[#5E81AC] dark:hover:text-[#88C0D0] transition-colors"
+          >
+            遊び場
+          </Link>
+        </div>
+      </nav>
+    </header>
+  );
+}
+```
+
+## まとめ
+
+今回の変更により、Claude APIの使用量監視ページはよりアクセスしやすく、デザインも整理されました。また、Huskyによる自動更新の導入によって、開発者は手動でデータを更新する手間なく、常に最新の使用量データを参照できるようになりました。これにより、効率的な開発ワークフローが実現され、コスト管理もしやすくなります。
+
+---

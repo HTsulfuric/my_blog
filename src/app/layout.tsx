@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Zen_Kaku_Gothic_New } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
@@ -14,6 +15,13 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const zenKakuGothicNew = Zen_Kaku_Gothic_New({
+  variable: "--font-zen-kaku-gothic-new",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -35,7 +43,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "熱濃硫酸の本棚",
     description: "プログラミングと技術についてのブログ",
-    creator: "@HTsulfuric", // Assuming this is the handle based on the repo/domain name, user can change it
+    creator: "@HTsulfuric",
   },
 };
 
@@ -47,7 +55,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} ${zenKakuGothicNew.variable} antialiased flex flex-col min-h-screen`}
       >
         <Header />
         <main className="flex-1">{children}</main>

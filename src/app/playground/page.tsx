@@ -8,8 +8,8 @@ export const metadata = {
 export default function PlaygroundPage() {
   const tools = [
     {
-      title: "API使用量",
-      description: "Claude APIの日次使用量とコストを確認できます。",
+      title: "ClaudeAPI使用量",
+      description: "自分のClaude APIの使用量をグラフにしてみた(不定期更新)",
       href: "/playground/usage",
     },
   ];
@@ -17,7 +17,9 @@ export default function PlaygroundPage() {
   return (
     <main className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2 text-[#2E3440] dark:text-[#ECEFF4]">遊び場</h1>
+        <h1 className="text-3xl font-bold mb-2 text-[#2E3440] dark:text-[#ECEFF4]">
+          遊び場
+        </h1>
         <p className="text-[#4C566A] dark:text-[#D8DEE9]">
           いろいろなツールを置いておく場所です。
         </p>

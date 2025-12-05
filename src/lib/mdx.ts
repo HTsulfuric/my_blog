@@ -1,3 +1,4 @@
+import { cache } from "react";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
@@ -9,7 +10,7 @@ export const getPostSlugs = (): string[] => {
   return fs.readdirSync(POSTS_PATH);
 };
 
-export const getPostBySlug = async (slug: string): Promise<Post> => {
+export const getPostBySlug = cache(async (slug: string): Promise<Post> => {
   const sanitized = slug.replace(/[^a-zA-Z0-9-_]/g, "");
 
   if (slug !== sanitized || slug.includes("..")) {
@@ -37,7 +38,7 @@ export const getPostBySlug = async (slug: string): Promise<Post> => {
     frontMatter: data as PostFrontMatter,
     content,
   };
-};
+});
 
 export const getAllPostsMeta = (): PostMeta[] => {
   const slugs = getPostSlugs();
