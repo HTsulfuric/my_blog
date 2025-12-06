@@ -71,7 +71,9 @@ pre {
 
 /* インラインコード (`code`) */
 code {
-  @apply bg-gray-200 text-red-500 px-1 py-0.5 rounded text-sm;
+  @apply px-1 py-0.5 rounded text-sm;
+  background-color: var(--nord1); /* 例: 暗めの背景色 */
+  color: var(--nord6); /* 例: 明るめの文字色 */
 }
 
 /* コードブロック内の code タグは背景色をリセット（preが持つため） */
@@ -117,4 +119,12 @@ span[data-highlighted-line] {
   color: var(--nord10);
   margin-right: 0.25em;
   font-weight: inherit;
+}
+
+/* Remove backticks from inline code in prose */
+.prose code::before {
+  content: none !important;
+}
+.prose code::after {
+  content: none !important;
 }

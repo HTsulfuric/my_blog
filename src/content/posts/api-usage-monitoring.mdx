@@ -1,0 +1,131 @@
+---
+title: "Claude Codeの使用量をグラフにしてみた(ccusage)"
+date: "2025-12-05"
+description: "Next.js上でClaudeの使用状況を監視して、Huskyでデータの半自動更新"
+tags: ["Next.js", "Claude Code"]
+published: true
+---
+
+## はじめに
+
+Claude Codeって`ccusage`でトークン使用量を取得できるんですけど、正直生データで見せられても感情がわかないので、グラフにするついでにブログで公開したろーってやつです。 500番煎じぐらいでしょうけど、備忘録も兼ねて。
+
+---
+
+## ツール
+
+- このブログ
+- npx
+  - ccusage
+- recharts
+- Husky
+
+---
+
+## 実装
+
+### 1. API使用量を出力
+
+将来こういった~~ゴミ~~ツールを増やす気がするので、`/playground`ルートを作成して`Header`にリンクをおいといて、そこに`/usage`をぶら下げ。
+
+`/data/usage.json`に`ccusage daily --json`で取得したデータを保存しておいて、`UsageChart`コンポーネントでグラフ化したのを`page.tsx`で表示する感じ。
+大変なグラフ描画は`recharts`にまかせてるので、実態はデータをパースして渡すだけ(型定義がちょっとめんどい)。
+
+```tsx filename="src/app/playground/usage/UsageChart.tsx"
+// ccusage daily --jsonの出力に対応する型
+type DailyUsage = {
+  date: string;
+  inputTokens: number;
+  outputTokens: number;
+  cacheCreationTokens: number;
+  cacheReadTokens: number;
+  totalTokens: number;
+  totalCost: number;
+  modelsUsed: string[];
+  modelBreakdowns: {
+    modelName: string;
+    inputTokens: number;
+    outputTokens: number;
+    cacheCreationTokens: number;
+    cacheReadTokens: number;
+    cost: number;
+  }[];
+};
+
+
+// Rechartsで描画
+export default function UsageChart({ data }: { data: DailyUsage[] }) {
+  // 日付のフォーマット
+  const formattedData = data.map((item) => ({
+    ...item,
+    date: new Date(item.date).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    }),
+  }));
+
+
+  return (
+    <div>
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={formattedData}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="date" />
+          <YAxis unit="$" />
+          <Tooltip
+            formatter={(value: number) => [`$${value.toFixed(4)}`, "Cost"]}
+          />
+          <Line
+            dataKey="totalCost"
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  );
+
+```
+
+
+### 2. Huskyで半自動更新
+
+`ccusage` でデータを取得し、`src/data/usage.json` に保存するのを毎日自分でやるのは面倒なので、ある程度妥協して、`git commit`時に自動的に更新するようにしました。 これは、 `Husky` を使用してコミット時のフックを用意してあげます。
+
+#### `package.json` にスクリプトをおいておく
+
+`npm run update-usage` コマンドでデータが更新されるように定義しています。
+
+```json filename="package.json"
+{
+  "scripts": {
+    "update-usage": "mkdir -p src/data && npx ccusage daily --json > src/data/usage.json"
+  },
+}
+```
+
+#### Husky の設定 (.husky/pre-commit)
+
+`husky` をインストールし、`.husky/pre-commit` フックを作成しました。 このフックはコミット前に `npm run update-usage` を実行するように設定してます。
+
+```bash filename=".husky/pre-commit"
+echo "Running pre-commit hooks..."
+
+npm run update-usage
+
+git add src/data/usage.json
+
+npm run lint
+
+if [ $? -ne 0 ]; then
+  echo "Linting failed. Please fix the errors before committing."
+  exit 1
+fi
+```
+
+## まとめ
+
+いかがでしたか?
+まあそれこそClaude Codeに書かせれば一瞬ですが、Huskyで半自動化することで一日一本記事/アプデ をする気力になるので、まぁいいでしょう。 おわり!
+
+---
+
+余談: だれかfabicon作ってくれない? まだvercelのデフォアイコンのまんまなんだよね~。
