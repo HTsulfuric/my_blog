@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 
 const COOKIE_NAME = 'counter_auth';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Protect /tools/counter but allow /tools/counter/login

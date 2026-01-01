@@ -84,7 +84,16 @@ export async function verifyPassword(password: string) {
     return { success: false, error: 'Configuration error' };
   }
 
+  console.log('[DEBUG] Password check:', {
+    inputLength: password.length,
+    expectedLength: correctPassword.length,
+    inputFirst3: password.substring(0, 3),
+    expectedFirst3: correctPassword.substring(0, 3),
+  });
+
   const isValid = timingSafeCompare(password, correctPassword);
+
+  console.log('[DEBUG] Comparison result:', isValid);
 
   if (!isValid) {
     await recordAttempt(ip);

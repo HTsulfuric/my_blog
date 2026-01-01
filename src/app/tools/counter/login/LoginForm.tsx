@@ -28,7 +28,7 @@ export function LoginForm() {
           }
           setPassword('');
         }
-      } catch (err) {
+      } catch {
         setError('エラーが発生しました');
       }
     });

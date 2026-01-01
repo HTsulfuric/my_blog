@@ -2,8 +2,18 @@
 
 import { useState, useTransition } from 'react';
 import { addUser, deleteUser, addCounter, deleteCounter } from '@/app/tools/counter/actions';
-import { formatRelativeDate } from '@/lib/utils';
 import type { User } from '@/lib/counter-utils';
+
+function formatAbsoluteDate(dateString: string): string {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+  return `${year}年${month}月${day}日 ${hours}:${minutes}`;
+}
 
 export function CounterClient({ users }: { users: User[] }) {
   const [newUserName, setNewUserName] = useState('');
@@ -155,7 +165,7 @@ export function CounterClient({ users }: { users: User[] }) {
                           <div className="flex-1">
                             <p className="text-sm">{counter.reason}</p>
                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                              {formatRelativeDate(counter.timestamp)}
+                              {formatAbsoluteDate(counter.timestamp)}
                             </p>
                           </div>
                           <button
